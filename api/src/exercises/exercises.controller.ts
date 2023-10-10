@@ -15,7 +15,6 @@ export class ExercisesController {
     @Req() req: Request,
   ) {
     const userid = req.user['sub']; 
-    console.log('-->',userid)
     return this.exercisesService.create(createExerciseDto, userid);
   }
 

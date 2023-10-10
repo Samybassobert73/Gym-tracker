@@ -1,3 +1,4 @@
+import HeaderDashboard from "@/components/HeaderDashboard"
 import SideBar from "@/components/SideBar"
 
 
@@ -9,9 +10,14 @@ export default function DashboardLayout({
 
    
     return (
-    <div className='flex h-screen pt-16'>
-        <SideBar/>
-        <div className='flex-1 p-4'>{children}</div>
+    <div className='flex flex-col h-screen '>
+        <HeaderDashboard/>
+        <div className='flex flex-1  h-full'>
+          <SideBar/>
+          <div className="w-full h-full overflow-y-auto p-4">
+            {children}
+          </div>
+        </div> 
      </div>
    
       

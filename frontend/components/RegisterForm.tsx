@@ -8,12 +8,12 @@ import { useMutation } from 'react-query';
 import axios from 'axios';
 import { redirect } from 'next/navigation';
 import  ApiClient  from '../service/apiClient';
-import { useAuth } from '@/context/authContext';
+
 import { useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
-import { setAccessToken, setIsAuthenticate, setRefreshToken } from '@/redux/authSlice';
+import { setAccessToken, setIsAuthenticate, setRefreshToken } from '@/redux/slice/authSlice';
 
-const apiClient = new ApiClient();
+
 
 const schema = yup
   .object({
@@ -25,10 +25,9 @@ const schema = yup
   .required()
 
 const RegisterForm = () => {
+  const apiClient = new ApiClient();
   const router = useRouter();
   const dispatch = useDispatch();
-
-    
     const signUpMutation = useMutation({
       mutationFn: (data) => apiClient.signUp(data),
       onSuccess: (data) => {

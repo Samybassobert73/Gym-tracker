@@ -7,9 +7,9 @@ import * as yup from "yup"
 import { useMutation } from 'react-query';
 import  ApiClient  from '../service/apiClient';
 import { useRouter } from 'next/navigation';
-import { setAccessToken, setRefreshToken, setIsAuthenticate } from '@/redux/authSlice';
+import { setAccessToken, setRefreshToken, setIsAuthenticate } from '@/redux/slice/authSlice';
 import { useDispatch } from 'react-redux';
-const apiClient = new ApiClient();
+
 
 const schema = yup
   .object({
@@ -19,6 +19,7 @@ const schema = yup
   .required()
 
 const LoginForm = () => {
+  const apiClient = new ApiClient();
   const router = useRouter();
   const dispatch = useDispatch();
 

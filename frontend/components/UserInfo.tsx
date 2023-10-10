@@ -4,8 +4,8 @@ import  ApiClient  from '../service/apiClient';
 import { useQuery } from 'react-query';
 import Loader from './Loader';
 import { Skeleton } from "@/components/ui/skeleton"
-const apiClient = new ApiClient();
 function UserInfo() {
+  const apiClient = new ApiClient();
 
 
     const {data, error, isLoading} = useQuery({

@@ -23,7 +23,6 @@ export default function RootLayout({
           <Providers>
             <ReduxProviders>
               <AuthProviders>
-                <Header/>
                 {children}
               </AuthProviders>
             </ReduxProviders>

@@ -1,29 +1,42 @@
-import axios from 'axios';
-import store from '@/redux/store';
-import { setAccessToken, setRefreshToken } from '@/redux/authSlice';
+import axios, {AxiosInstance} from 'axios';
+import {store, persistor}from '@/redux/store';
+import { setAccessToken, setRefreshToken } from '@/redux/slice/authSlice';
 
-const getClient = (baseUrl = null)=> {
+const getClient = (baseUrl: null | string = null, accessToken: string | null = null):AxiosInstance => {
+  const headers: Record<string, string> = {};
 
+  if (accessToken) {
+    headers['Authorization'] = `Bearer ${accessToken}`;
+  }
+  
+  
   const options = {
-    baseURL: baseUrl
+    baseURL: baseUrl,
+    headers: headers, // Pass the headers object to the Axios options
   };
+
+
   const client = axios.create(options);
+
+
+
+
   // Add a request interceptor
   client.interceptors.response.use(
     (response) => response,
     async (error) => {
       const originalRequest = error.config;
-      const refreshToken = store.getState().auth.refreshToken;
+      const orefreshToken = store.getState().auth.refreshToken;
       
-      if (error.response.status === 401 && refreshToken) {
+      if (error.response.status === 401 && orefreshToken) {
         
         try {
-          const headers = { Authorization: `Bearer ${refreshToken}` };
+          const headers = { Authorization: `Bearer ${orefreshToken}` };
           const response = await client.get('/auth/refresh', { headers });
-          console.log(response.data)
-          const { accessToken, newRefreshToken } = response.data;
+          console.log('refresh token response', response)
+          const { accessToken, refreshToken }:any = response.data;
           store.dispatch(setAccessToken(accessToken));
-          store.dispatch(setRefreshToken(newRefreshToken));
+          store.dispatch(setRefreshToken(refreshToken));
           originalRequest.headers.Authorization = `Bearer ${accessToken}`;
           return axios(originalRequest);
         } catch (error) {
@@ -47,9 +60,11 @@ const getClient = (baseUrl = null)=> {
 
 
 class ApiClient {
+  //accessToken;
   client: any;
-  constructor() {
-    this.client = getClient('http://localhost:8080');
+  constructor(token: string | null = null) {
+   // this.accessToken = token;
+    this.client = getClient(process.env.NEXT_PUBLIC_API_URL, store.getState()?.auth?.accessToken);
   }
 
   async signUp(signUpData: { name: string; username: string; email: string; password: string }) {
@@ -61,9 +76,7 @@ class ApiClient {
   }
 
   async logout() {
-    const accessToken = store.getState().auth.accessToken;
-    const headers = { Authorization: `Bearer ${accessToken}` };
-    return this.client.get(`/auth/logout/`, { headers });
+    return this.client.get(`/auth/logout/`);
   }
 
   async getUserById(userId: string) {
@@ -71,25 +84,31 @@ class ApiClient {
   }
 
   async getMe() {
-    const accessToken = store.getState().auth.accessToken;
-    const headers = { Authorization: `Bearer ${accessToken}` };
-    return this.client.get(`/users/me`, { headers });
+    return this.client.get(`/users/me`);
   }
 
   async createExercise(exerciceData: { name: string; muscles: string[] }) {
-    const accessToken = store.getState().auth.accessToken;
-    const headers = { Authorization: `Bearer ${accessToken}` };
-    return this.client.post(`/exercises`, exerciceData, { headers });
+    return this.client.post(`/exercises`, exerciceData);
   }
 
   async getExercices() {
-    const accessToken = store.getState().auth.accessToken;
-    const headers = { Authorization: `Bearer ${accessToken}` };
-    return this.client.get(`/exercises/me`, { headers });
+    return this.client.get(`/exercises/me`);
   }
 
 
+  async createSeance(seanceData:any) {
+    return this.client.post(`/seances`, seanceData);
+  }
 
+  async getSeances() {
+    return this.client.get(`/seances/me`);
+  }
+
+  async getSeance(id:string) {
+    const data = this.client.get(`/seances/${id}`);
+    //console.log('seance', data)
+    return data;
+  }
   
 
   // Add more API functions as needed

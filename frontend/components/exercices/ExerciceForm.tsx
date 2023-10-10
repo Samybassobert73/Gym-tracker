@@ -8,7 +8,7 @@ import { useMutation } from 'react-query';
 import  ApiClient  from '../../service/apiClient';
 import { muscles, Muscle } from './muscle';
 import { AnimatePresence, motion } from 'framer-motion';
-const apiClient = new ApiClient();
+
 
 const schema = yup.object().shape({
     name: yup.string().required().min(3),
@@ -21,7 +21,8 @@ const schema = yup.object().shape({
   })
 
 const LoginForm = () => {
-
+  const apiClient = new ApiClient();
+  
      const remove = (arr: number[], item: number) => {
         const newArr = [...arr];
         newArr.splice(newArr.findIndex(i => i === item), 1);
@@ -53,10 +54,6 @@ const LoginForm = () => {
             console.error('Registration error:', error.response.data.message);
         }
       }
-
-      useEffect(() => {
-        console.log(notifications)
-      },[notifications])
       return (
         <>
             <form onSubmit={handleSubmit(onSubmit)} className="">

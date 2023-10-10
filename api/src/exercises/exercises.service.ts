@@ -35,7 +35,6 @@ export class ExercisesService {
   }
 
   async findAllByUserId(userid: string): Promise<Exercise[]> {
-    console.log(this.ExerciseModel.find({ userid }).exec())
     return this.ExerciseModel.find({ userid }).exec();
   }
 }

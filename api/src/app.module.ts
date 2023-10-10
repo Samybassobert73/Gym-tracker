@@ -6,6 +6,7 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { ExercisesModule } from './exercises/exercises.module';
+import { SeancesModule } from './seances/seances.module';
 @Module({
   imports: [MongooseModule.forRoot('mongodb://database:27017/samybase'),
     UsersModule,
@@ -14,7 +15,8 @@ import { ExercisesModule } from './exercises/exercises.module';
       isGlobal: true,
       envFilePath: '.env',
     }),
-    ExercisesModule
+    ExercisesModule,
+    SeancesModule
   ],
   controllers: [AppController],
   providers: [AppService],
