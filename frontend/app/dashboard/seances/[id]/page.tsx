@@ -9,15 +9,14 @@ import React from 'react'
 import { useQuery } from 'react-query'
 
 const page = (props:any) => {
-    const id = props.params.id
+    const seanceId = props.params.id
     const apiClient = new ApiClient();
 
     const {data, error, isLoading} = useQuery({
         queryKey: ['seance'],
-        queryFn: () => apiClient.getSeance(id)
+        queryFn: () => apiClient.getSeance(seanceId)
       });
-     console.log('ici',data);
-
+   
 if (isLoading) return (
     <Loader/>
 )
@@ -40,9 +39,13 @@ if (error) return <div className='text-red-500'>error...</div>
           ))}
       </div>
 
-      <div className=''>    
-        <TrainingForm donne={data.data} seanceId={id}/>
-      </div>
+
+
+      
+        <div className=''>    
+          <TrainingForm donne={data.data} seanceId={seanceId}/>
+        </div>
+          
 
     </div>
   )

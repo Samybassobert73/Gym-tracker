@@ -106,10 +106,26 @@ class ApiClient {
 
   async getSeance(id:string) {
     const data = this.client.get(`/seances/${id}`);
-    //console.log('seance', data)
     return data;
   }
   
+  async createTraining(trainingData:any) {
+    return this.client.post(`/trainings`, trainingData);
+  }
+
+  async getTrainings() {
+    const data = this.client.get(`/trainings/me`);
+    return data;
+  }
+
+  async getTrainingsSeances() {
+    const data = this.client.get(`/trainings/seances/me`);
+    return data;
+  }
+  async getTrainingsExercises() {
+    const data = this.client.get(`/trainings/exercises/me`);
+    return data;
+  }
 
   // Add more API functions as needed
 
